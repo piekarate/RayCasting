@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		943D8EBB294D0DFC00EF3750 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 943D8EBA294D0DFC00EF3750 /* main.cpp */; };
+		949A0248294DFFA00087B235 /* Map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 949A0246294DFFA00087B235 /* Map.cpp */; };
+		949A024B294E009F0087B235 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 949A0249294E009F0087B235 /* Player.cpp */; };
 		94AD399C294DDE240009C1D1 /* sfml-graphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94AD3996294DDE240009C1D1 /* sfml-graphics.framework */; };
 		94AD399F294DDE240009C1D1 /* sfml-window.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94AD3999294DDE240009C1D1 /* sfml-window.framework */; };
 		94AD39A0294DDE240009C1D1 /* SFML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94AD399A294DDE240009C1D1 /* SFML.framework */; };
@@ -18,6 +20,10 @@
 /* Begin PBXFileReference section */
 		943D8EB2294D0DFC00EF3750 /* RayCasting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayCasting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		943D8EBA294D0DFC00EF3750 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		949A0246294DFFA00087B235 /* Map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Map.cpp; sourceTree = "<group>"; };
+		949A0247294DFFA00087B235 /* Map.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Map.hpp; sourceTree = "<group>"; };
+		949A0249294E009F0087B235 /* Player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		949A024A294E009F0087B235 /* Player.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		94AD3996294DDE240009C1D1 /* sfml-graphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "sfml-graphics.framework"; path = "../GravitySimulator/ExternalLibraries/SFML/Frameworks/sfml-graphics.framework"; sourceTree = "<group>"; };
 		94AD3999294DDE240009C1D1 /* sfml-window.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "sfml-window.framework"; path = "../GravitySimulator/ExternalLibraries/SFML/Frameworks/sfml-window.framework"; sourceTree = "<group>"; };
 		94AD399A294DDE240009C1D1 /* SFML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SFML.framework; path = ../GravitySimulator/ExternalLibraries/SFML/Frameworks/SFML.framework; sourceTree = "<group>"; };
@@ -66,6 +72,8 @@
 				94AD39A2294DDE680009C1D1 /* RayCasting.entitlements */,
 				943D8EBA294D0DFC00EF3750 /* main.cpp */,
 				94AD39A4294DDF1E0009C1D1 /* Application.cpp */,
+				949A0246294DFFA00087B235 /* Map.cpp */,
+				949A0249294E009F0087B235 /* Player.cpp */,
 			);
 			path = RayCasting;
 			sourceTree = "<group>";
@@ -85,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				94AD39A5294DDF1E0009C1D1 /* Application.hpp */,
+				949A0247294DFFA00087B235 /* Map.hpp */,
+				949A024A294E009F0087B235 /* Player.hpp */,
 			);
 			path = HeaderFiles;
 			sourceTree = "<group>";
@@ -178,6 +188,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				949A024B294E009F0087B235 /* Player.cpp in Sources */,
+				949A0248294DFFA00087B235 /* Map.cpp in Sources */,
 				94AD39A6294DDF1E0009C1D1 /* Application.cpp in Sources */,
 				943D8EBB294D0DFC00EF3750 /* main.cpp in Sources */,
 			);

@@ -2,8 +2,8 @@
 #include <iostream>
 #include <vector>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "Player.hpp"
+#include "Map.hpp"
 
 
 class Application
@@ -16,7 +16,9 @@ private:
     sf::Event event;
     
     // Objects
-
+    Player player;
+    Map map;
+    
     // Initializer Functions
     
     void initVariables();
@@ -31,6 +33,7 @@ public:
     const bool isRunning();
     void pollEvents();
 
+    void updatePlayer();
     
     void update();
     void render();

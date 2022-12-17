@@ -7,7 +7,7 @@ void Application::initVariables()
 
 void Application::initWindow()
 {
-    this->videoMode = sf::VideoMode(1000, 1000);
+    this->videoMode = sf::VideoMode(2048, 1024);
     this->window = new sf::RenderWindow(this->videoMode, "Ray Casting", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
 }
@@ -43,18 +43,27 @@ void Application::pollEvents()
     }
 }
 
+void Application::updatePlayer()
+{
+    this->player.update();
+}
+
 void Application::update()
 {
     this->pollEvents();
     
     // Update objects
+    this->updatePlayer();
 }
 
 void Application::render()
 {
-    this->window->clear();
+    this->window->clear(sf::Color(128,128,128));
     
     // Render objects
+    
+    this->map.render(this->window);
+    this->player.render(this->window);
     
     this->window->display();
 }
