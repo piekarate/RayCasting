@@ -3,11 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include <math.h>
+
 class Player
 {
 private:
     // Variables
     float movementSpeed;
+    
+    float playerDX, playerDY, playerAngle;
     
     sf::RectangleShape shape;
     
