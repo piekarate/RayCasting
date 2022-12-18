@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "Map.hpp"
 #include <math.h>
 
 class Player
@@ -14,6 +15,7 @@ private:
     float playerDX, playerDY, playerAngle;
     
     sf::RectangleShape shape;
+    std::vector<sf::Vertex> rays;
     
     
     // Functions
@@ -24,8 +26,15 @@ public:
     Player();
     ~Player();
     
+    float degToRad(int a);
+    float fixAng(float a);
+    
     void updateInput();
     
-    void update();
+    float distance(float ax, float ay, float bx, float by);
+    
+    void drawRays3D(Map map);
+    
+    void update(Map map);
     void render(sf::RenderTarget* target);
 };

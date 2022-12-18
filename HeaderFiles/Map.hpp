@@ -4,23 +4,24 @@
 #include <SFML/Window.hpp>
 
 #include <iostream>
+#include <array>
 
 class Map
 {
 private:
     // Variables
     int mapX, mapY, mapSize;
-    int map [64] =
-    {
-        1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 1, 0, 0, 0, 0, 1,
-        1, 0, 1, 0, 0, 0, 0, 1,
-        1, 0, 1, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 1, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 1, 1, 1,
-    };
+    
+    std::array<int, 64> map = {
+            1, 1, 1, 1, 1, 1, 1, 1,
+            1, 0, 1, 0, 0, 0, 0, 1,
+            1, 0, 1, 0, 0, 0, 0, 1,
+            1, 0, 1, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1,
+        };
     
     // Functions
     void initVariables();
@@ -30,6 +31,11 @@ public:
     // Constructors | Destructors
     Map();
     ~Map();
+    
+    // Accessors
+    sf::Vector2f getXY();
+    int getSize();
+    std::array<int, 64> getMap();
     
     void update();
     void render(sf::RenderTarget* target);

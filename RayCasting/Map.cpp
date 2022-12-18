@@ -21,6 +21,21 @@ Map::~Map()
     
 }
 
+sf::Vector2f Map::getXY()
+{
+    return sf::Vector2f(this->mapX, this->mapY);
+}
+
+int Map::getSize()
+{
+    return this->mapSize;
+}
+
+std::array<int, 64> Map::getMap()
+{
+    return this->map;
+}
+
 void Map::update()
 {
     

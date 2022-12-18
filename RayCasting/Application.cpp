@@ -45,7 +45,7 @@ void Application::pollEvents()
 
 void Application::updatePlayer()
 {
-    this->player.update();
+    this->player.update(this->map);
 }
 
 void Application::update()
