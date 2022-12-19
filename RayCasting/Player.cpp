@@ -79,13 +79,23 @@ void Player::drawRays3D(Map map)
     int mapY = map.getXY().y;
 
     std::array<int, 64> tempMap = map.getMap();
+    
+    float DR = 0.0174533; // One degree in radiants
 
-    rayAngle = this->playerAngle;
+    rayAngle = this->playerAngle - DR * 30;
+    if (rayAngle<0)
+    {
+        rayAngle+=2*M_PI;
+    }
+    if (rayAngle>2*M_PI) {
+        rayAngle-=2*M_PI;
+    }
+    
+    
     
     this->rays.clear();
     
-    
-    for (rayN = 0; rayN < 1; rayN++)
+    for (rayN = 0; rayN < 60; rayN++)
     {
         //  --- Check Horizontal Lines ---
         dof = 0;
@@ -190,6 +200,14 @@ void Player::drawRays3D(Map map)
         if (disV > disH) {rayX=hx; rayY=hy;}
         this->rays.push_back(sf::Vertex( sf::Vector2f(playerX, playerY), sf::Color::Red ));
         this->rays.push_back(sf::Vertex( sf::Vector2f(rayX, rayY), sf::Color::Red ));
+        rayAngle += DR;
+        if (rayAngle<0)
+        {
+            rayAngle+=2*M_PI;
+        }
+        if (rayAngle>2*M_PI) {
+            rayAngle-=2*M_PI;
+        }
         
     }
     
