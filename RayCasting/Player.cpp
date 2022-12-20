@@ -70,13 +70,15 @@ float Player::distance(float ax, float ay, float bx, float by)
 
 void Player::drawRays3D(Map map)
 {
-    int rayN, mx, my, mp, dof = 0; float rayX, rayY, rayAngle, xOffset, yOffset = 0;
+    int rayN, mx, my, mp, dof = 0; float rayX, rayY, rayAngle, xOffset, yOffset, finalDistance = 0;
     
     float playerX = this->shape.getPosition().x+10;
     float playerY = this->shape.getPosition().y+10;
     
     int mapX = map.getXY().x;
     int mapY = map.getXY().y;
+    
+    int mapSize = map.getSize();
 
     std::array<int, 64> tempMap = map.getMap();
     
@@ -94,6 +96,8 @@ void Player::drawRays3D(Map map)
     
     
     this->rays.clear();
+    this->walls3d.clear();
+    sf::Color Color;
     
     for (rayN = 0; rayN < 60; rayN++)
     {
@@ -196,10 +200,30 @@ void Player::drawRays3D(Map map)
                 dof += 1;
             }
         }
-        if (disV < disH) {rayX=vx; rayY=vy;}
-        if (disV > disH) {rayX=hx; rayY=hy;}
+        if (disV < disH) {rayX=vx; rayY=vy; finalDistance=disV; Color = sf::Color(255, 0, 0);}
+        if (disV > disH) {rayX=hx; rayY=hy; finalDistance=disH; Color = sf::Color(200, 0, 0);}
+        // Push Vertices in rays vector
         this->rays.push_back(sf::Vertex( sf::Vector2f(playerX, playerY), sf::Color::Red ));
         this->rays.push_back(sf::Vertex( sf::Vector2f(rayX, rayY), sf::Color::Red ));
+        
+        // Draw 3D Walls
+        float ca = this->playerAngle - rayAngle;
+        if (ca < 0) {ca+=2*M_PI;} if (ca > 2*M_PI) {ca-=2*M_PI;}
+        finalDistance = finalDistance*cos(ca);
+        float lineH = (mapSize*740)/(finalDistance);
+        if (lineH > 740) { lineH = 740; }
+        
+        float lineOffset = 620-lineH/2;
+    
+        sf::RectangleShape temp;
+        temp.setSize(sf::Vector2f(16, lineH));
+        temp.setPosition(sf::Vector2f(rayN*16+1060, lineOffset));
+        temp.setFillColor(Color);
+        
+        
+        this->walls3d.push_back(temp);
+        
+        // Adjust angle for next ray
         rayAngle += DR;
         if (rayAngle<0)
         {
@@ -222,7 +246,13 @@ void Player::update(Map map)
 void Player::render(sf::RenderTarget *target)
 {
     target->draw(this->shape);
-    
+    // Draw rays
     target->draw(&this->rays[0], this->rays.size(), sf::Lines);
+    
+//    target->draw(&this->walls3d[0], this->walls3d.size(), sf::Lines);
+    
+    for (sf::RectangleShape wall : walls3d) {
+        target->draw(wall);
+    }
 }
 

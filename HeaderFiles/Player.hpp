@@ -16,6 +16,7 @@ private:
     
     sf::RectangleShape shape;
     std::vector<sf::Vertex> rays;
+    std::vector<sf::RectangleShape> walls3d;
     
     
     // Functions
