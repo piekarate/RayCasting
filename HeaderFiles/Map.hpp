@@ -22,6 +22,7 @@ private:
             1, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1,
         };
+    std::vector<sf::Vertex> vertices;
     
     // Functions
     void initVariables();

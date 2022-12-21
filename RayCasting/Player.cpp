@@ -108,17 +108,17 @@ void Player::drawRays3D(Map map)
         // Looking up
         if (rayAngle > M_PI)
         {
-            rayY = (((int)playerY>>7)<<7)-0.0001;
+            rayY = (((int)playerY>>(mapX-1))<<(mapX-1))-0.0001;
             rayX =(playerY - rayY) * aTan + playerX;
-            yOffset = -128;
+            yOffset = -mapSize;
             xOffset = -yOffset*aTan;
         }
         // Looking down
         if (rayAngle < M_PI)
         {
-            rayY = (((int)playerY>>7)<<7)+128;
+            rayY = (((int)playerY>>(mapX-1))<<(mapX-1))+mapSize;
             rayX =(playerY - rayY) * aTan + playerX;
-            yOffset = 128;
+            yOffset = mapSize;
             xOffset = -yOffset*aTan;
         }
         // Looking straight left or right
@@ -126,13 +126,13 @@ void Player::drawRays3D(Map map)
         {
             rayX = playerX;
             rayY = playerY;
-            dof = 8;
+            dof = mapX;
         }
 
-        while (dof < 8)
+        while (dof < mapX)
         {
-            mx = (int) (rayX)>>7;
-            my = (int) (rayY)>>7;
+            mx = (int) (rayX)>>(mapX-1);
+            my = (int) (rayY)>>(mapX-1);
             mp = my*mapX+mx;
 
             // Hit wall
@@ -142,7 +142,7 @@ void Player::drawRays3D(Map map)
                 hx = rayX;
                 hy = rayY;
                 disH = distance(playerX, playerY, hx, hy);
-                dof = 8;
+                dof = mapX;
             } else
             {
                 rayX += xOffset;
@@ -158,17 +158,17 @@ void Player::drawRays3D(Map map)
         // Looking left
         if (rayAngle > M_PI/2 && rayAngle < 3*M_PI/2)
         {
-            rayX = (((int)playerX>>7)<<7)-0.0001;
+            rayX = (((int)playerX>>(mapX-1))<<(mapX-1))-0.0001;
             rayY =(playerX - rayX) * nTan + playerY;
-            xOffset = -128;
+            xOffset = -mapSize;
             yOffset = -xOffset*nTan;
         }
         // Looking right
         if (rayAngle < M_PI/2 || rayAngle > 3*M_PI/2)
         {
-            rayX = (((int)playerX>>7)<<7)+128;
+            rayX = (((int)playerX>>(mapX-1))<<(mapX-1))+mapSize;
             rayY =(playerX - rayX) * nTan + playerY;
-            xOffset = 128;
+            xOffset = mapSize;
             yOffset = -xOffset*nTan;
         }
         // Looking straight left or right
@@ -176,13 +176,13 @@ void Player::drawRays3D(Map map)
         {
             rayX = playerX;
             rayY = playerY;
-            dof = 8;
+            dof = mapX;
         }
 
-        while (dof < 8)
+        while (dof < mapX)
         {
-            mx = (int) (rayX)>>7;
-            my = (int) (rayY)>>7;
+            mx = (int) (rayX)>>(mapX-1);
+            my = (int) (rayY)>>(mapX-1);
             mp = my*mapX+mx;
 
             // Hit wall
@@ -192,7 +192,7 @@ void Player::drawRays3D(Map map)
                 vx = rayX;
                 vy = rayY;
                 disV = distance(playerX, playerY, vx, vy);
-                dof = 8;
+                dof = mapX;
             } else
             {
                 rayX += xOffset;
@@ -248,8 +248,6 @@ void Player::render(sf::RenderTarget *target)
     target->draw(this->shape);
     // Draw rays
     target->draw(&this->rays[0], this->rays.size(), sf::Lines);
-    
-//    target->draw(&this->walls3d[0], this->walls3d.size(), sf::Lines);
     
     for (sf::RectangleShape wall : walls3d) {
         target->draw(wall);

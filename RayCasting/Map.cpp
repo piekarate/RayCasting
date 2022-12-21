@@ -9,12 +9,40 @@ void Map::initVariables()
 
 void Map::initMap()
 {
- 
+    int x, y, xOffset, yOffset;
+    sf::Color color;
+    
+    for (y=0; y<this->mapY; y++)
+    {
+        for (x=0; x<this->mapX; x++)
+        {
+            // Choose Color based on array numbers
+            if (this->map[y*this->mapX+x] == 1)
+            {
+
+                color = sf::Color::White;
+                
+            } else
+            {
+
+                color = sf::Color::Black;
+            }
+            
+            // Draw rectangle
+            xOffset = x*this->mapSize;
+            yOffset = y*this->mapSize;
+            this->vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + 1, yOffset + 1), color));
+            this->vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + 1, yOffset + this->mapSize - 1), color));
+            this->vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + this->mapSize - 1, yOffset + this->mapSize - 1), color));
+            this->vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + this->mapSize - 1, yOffset + 1), color));
+        }
+    }
 }
 
 Map::Map()
 {
     initVariables();
+    initMap();
 }
 Map::~Map()
 {
@@ -43,36 +71,5 @@ void Map::update()
 
 void Map::render(sf::RenderTarget *target)
 {
-    int x, y, xOffset, yOffset;
-    std::vector<sf::Vertex> vertices;
-    sf::Color color;
-    
-    for (y=0; y<this->mapY; y++)
-    {
-        for (x=0; x<this->mapX; x++)
-        {
-            // Choose Color based on array numbers
-            if (this->map[y*this->mapX+x] == 1)
-            {
-
-                color = sf::Color::White;
-                
-            } else
-            {
-
-                color = sf::Color::Black;
-            }
-            
-            // Draw rectangle
-            xOffset = x*this->mapSize;
-            yOffset = y*this->mapSize;
-            
-            vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + 1, yOffset + 1), color));
-            vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + 1, yOffset + this->mapSize - 1), color));
-            vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + this->mapSize - 1, yOffset + this->mapSize - 1), color));
-            vertices.push_back( sf::Vertex( sf::Vector2f(xOffset + this->mapSize - 1, yOffset + 1), color));
-        }
-    }
-    
-    target->draw(&vertices[0], vertices.size(), sf::Quads);
+    target->draw(&this->vertices[0], this->vertices.size(), sf::Quads);
 }
