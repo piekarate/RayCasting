@@ -26,40 +26,75 @@ Player::~Player()
     
 }
 
+float Player::map(float value, float istart, float istop, float ostart, float ostop) {
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
+
 float Player::degToRad(int a) {return a*M_PI/180.0;}
 
 float Player::fixAng(float a) { if (a>359) {a-=360;} if (a<0) {a+= 360;} return a;}
 
 
-void Player::updateInput()
+void Player::updateInput(Map map)
 {
     // Keyboard inputs
+    float playerX = this->shape.getPosition().x+10;
+    float playerY = this->shape.getPosition().y+10;
+    
+    int mapX = map.getXY().x;
+    int mapY = map.getXY().y;
+
+    std::array<int, 110> tempMap = map.getMap();
+    
+    // Rotate Left
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-//        this->shape.move(-this->movementSpeed, 0.f);
         this->playerAngle -= 0.1;
         if (this->playerAngle < 0) {this->playerAngle += 2*M_PI;}
         this->playerDX = cos(playerAngle) * 5;
         this->playerDY = sin(playerAngle) * 5;
     }
-    // Right
+    // Rotate Right
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-//        this->shape.move(this->movementSpeed, 0.f);
         this->playerAngle += 0.1;
         if (this->playerAngle > 2*M_PI) {this->playerAngle -= 2*M_PI;}
         this->playerDX = cos(playerAngle) * 5;
         this->playerDY = sin(playerAngle) * 5;
     }
-    // Up
+    
+    int xOffset = 0; if (this->playerDX<0) {xOffset=-20;} else {xOffset=20;}
+    int yOffset = 0; if (this->playerDY<0) {yOffset=-20;} else {yOffset=20;}
+    
+    int ipx = playerX/128.f, ipx_add_xOffset=(playerX+xOffset)/128, ipx_sub_xOffset=(playerX-xOffset)/128;
+    int ipy = playerY/128.8, ipy_add_yOffset=(playerY+yOffset)/128, ipy_sub_yOffset=(playerY-yOffset)/128;
+    
+    
+    // Forward
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        this->shape.move(this->playerDX, this->playerDY);
+        if (tempMap[ipy*mapX + ipx_add_xOffset]==0)
+        {
+            this->shape.move(this->playerDX, 0);
+        }
+        if (tempMap[ipy_add_yOffset*mapX + ipx]==0)
+        {
+            this->shape.move(0, this->playerDY);
+        }
+        
+        
     }
-    // Down
+    // Backwards
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        this->shape.move(-this->playerDX, -this->playerDY);
+        if (tempMap[ipy*mapX + ipx_sub_xOffset]==0)
+        {
+            this->shape.move(-this->playerDX, 0);
+        }
+        if (tempMap[ipy_sub_yOffset*mapX + ipx]==0)
+        {
+            this->shape.move(0, -this->playerDY);
+        }
     }
 }
 
@@ -80,7 +115,7 @@ void Player::drawRays3D(Map map)
     
     int mapSize = map.getSize();
 
-    std::array<int, 64> tempMap = map.getMap();
+    std::array<int, 110> tempMap = map.getMap();
     
     float DR = 0.0174533; // One degree in radiants
 
@@ -108,7 +143,7 @@ void Player::drawRays3D(Map map)
         // Looking up
         if (rayAngle > M_PI)
         {
-            rayY = (((int)playerY>>(mapX-1))<<(mapX-1))-0.0001;
+            rayY = (((int)playerY>>7)<<7)-0.0001;
             rayX =(playerY - rayY) * aTan + playerX;
             yOffset = -mapSize;
             xOffset = -yOffset*aTan;
@@ -116,7 +151,7 @@ void Player::drawRays3D(Map map)
         // Looking down
         if (rayAngle < M_PI)
         {
-            rayY = (((int)playerY>>(mapX-1))<<(mapX-1))+mapSize;
+            rayY = (((int)playerY>>7)<<7)+mapSize;
             rayX =(playerY - rayY) * aTan + playerX;
             yOffset = mapSize;
             xOffset = -yOffset*aTan;
@@ -131,8 +166,8 @@ void Player::drawRays3D(Map map)
 
         while (dof < mapX)
         {
-            mx = (int) (rayX)>>(mapX-1);
-            my = (int) (rayY)>>(mapX-1);
+            mx = (int) (rayX)>>7;
+            my = (int) (rayY)>>7;
             mp = my*mapX+mx;
 
             // Hit wall
@@ -158,7 +193,7 @@ void Player::drawRays3D(Map map)
         // Looking left
         if (rayAngle > M_PI/2 && rayAngle < 3*M_PI/2)
         {
-            rayX = (((int)playerX>>(mapX-1))<<(mapX-1))-0.0001;
+            rayX = (((int)playerX>>7)<<7)-0.0001;
             rayY =(playerX - rayX) * nTan + playerY;
             xOffset = -mapSize;
             yOffset = -xOffset*nTan;
@@ -166,7 +201,7 @@ void Player::drawRays3D(Map map)
         // Looking right
         if (rayAngle < M_PI/2 || rayAngle > 3*M_PI/2)
         {
-            rayX = (((int)playerX>>(mapX-1))<<(mapX-1))+mapSize;
+            rayX = (((int)playerX>>7)<<7)+mapSize;
             rayY =(playerX - rayX) * nTan + playerY;
             xOffset = mapSize;
             yOffset = -xOffset*nTan;
@@ -181,8 +216,8 @@ void Player::drawRays3D(Map map)
 
         while (dof < mapX)
         {
-            mx = (int) (rayX)>>(mapX-1);
-            my = (int) (rayY)>>(mapX-1);
+            mx = (int) (rayX)>>7;
+            my = (int) (rayY)>>7;
             mp = my*mapX+mx;
 
             // Hit wall
@@ -200,6 +235,8 @@ void Player::drawRays3D(Map map)
                 dof += 1;
             }
         }
+        
+        
         if (disV < disH) {rayX=vx; rayY=vy; finalDistance=disV; Color = sf::Color(255, 0, 0);}
         if (disV > disH) {rayX=hx; rayY=hy; finalDistance=disH; Color = sf::Color(200, 0, 0);}
         // Push Vertices in rays vector
@@ -219,6 +256,11 @@ void Player::drawRays3D(Map map)
         temp.setSize(sf::Vector2f(16, lineH));
         temp.setPosition(sf::Vector2f(rayN*16+1060, lineOffset));
         temp.setFillColor(Color);
+        // Get alpha color for rectangles based on their length
+//        float alpha = this->map(lineH, 0, 740, 0, 255);
+//        temp.setFillColor(sf::Color(Color.r, Color.g, Color.b, alpha));
+        
+        
         
         
         this->walls3d.push_back(temp);
@@ -239,7 +281,7 @@ void Player::drawRays3D(Map map)
 
 void Player::update(Map map)
 {
-    this->updateInput();
+    this->updateInput(map);
     this->drawRays3D(map);
 }
 

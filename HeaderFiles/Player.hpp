@@ -30,8 +30,8 @@ public:
     float degToRad(int a);
     float fixAng(float a);
     
-    void updateInput();
-    
+    void updateInput(Map map);
+    float map(float value, float istart, float istop, float ostart, float ostop);
     float distance(float ax, float ay, float bx, float by);
     
     void drawRays3D(Map map);

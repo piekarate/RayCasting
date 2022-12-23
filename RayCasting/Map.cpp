@@ -2,8 +2,8 @@
 
 void Map::initVariables()
 {
-    this->mapX = 8;
-    this->mapY = 8;
+    this->mapX = 10;
+    this->mapY = 11;
     this->mapSize = 128;
 }
 
@@ -59,7 +59,7 @@ int Map::getSize()
     return this->mapSize;
 }
 
-std::array<int, 64> Map::getMap()
+std::array<int, 110> Map::getMap()
 {
     return this->map;
 }
