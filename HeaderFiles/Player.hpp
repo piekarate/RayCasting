@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+//#include "Textures.h"
+
+
 #include "Map.hpp"
 #include <math.h>
 
@@ -15,9 +18,10 @@ private:
     float playerDX, playerDY, playerAngle;
     
     sf::RectangleShape shape;
+    sf::RectangleShape floor;
     std::vector<sf::Vertex> rays;
     std::vector<sf::RectangleShape> walls3d;
-    
+    std::vector<sf::RectangleShape> pixels;
     
     // Functions
     void initVariables();

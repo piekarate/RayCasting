@@ -62,7 +62,7 @@ void Application::render()
     
     // Render objects
     
-    this->map.render(this->window);
+//    this->map.render(this->window);
     this->player.render(this->window);
     
     this->window->display();

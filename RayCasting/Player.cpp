@@ -13,6 +13,11 @@ void Player::initShape()
     this->shape.setFillColor(sf::Color::Yellow);
     this->shape.setSize(sf::Vector2f(20.f, 20.f));
     this->shape.setPosition(500, 500);
+    
+    this->floor.setSize(sf::Vector2f(2048, 512));
+    this->floor.setPosition(0, 512);
+    this->floor.setFillColor(sf::Color::Blue);
+    
 }
 
 Player::Player()
@@ -42,7 +47,6 @@ void Player::updateInput(Map map)
     float playerY = this->shape.getPosition().y+10;
     
     int mapX = map.getXY().x;
-    int mapY = map.getXY().y;
 
     std::array<int, 110> tempMap = map.getMap();
     
@@ -132,9 +136,10 @@ void Player::drawRays3D(Map map)
     
     this->rays.clear();
     this->walls3d.clear();
+    this->pixels.clear();
     sf::Color Color;
     
-    for (rayN = 0; rayN < 60; rayN++)
+    for (rayN = 0; rayN < 128; rayN++)
     {
         //  --- Check Horizontal Lines ---
         dof = 0;
@@ -172,7 +177,7 @@ void Player::drawRays3D(Map map)
 
             // Hit wall
 
-            if (mp > 0 &&mp < mapX*mapY && tempMap[mp] == 1)
+            if (mp > 0 && mp < mapX*mapY && tempMap[mp] == 1)
             {
                 hx = rayX;
                 hy = rayY;
@@ -247,26 +252,36 @@ void Player::drawRays3D(Map map)
         float ca = this->playerAngle - rayAngle;
         if (ca < 0) {ca+=2*M_PI;} if (ca > 2*M_PI) {ca-=2*M_PI;}
         finalDistance = finalDistance*cos(ca);
-        float lineH = (mapSize*740)/(finalDistance);
-        if (lineH > 740) { lineH = 740; }
+        float lineH = (mapSize*1024)/(finalDistance);
+        if (lineH>1024) {lineH=1024;}
         
-        float lineOffset = 620-lineH/2;
-    
-        sf::RectangleShape temp;
-        temp.setSize(sf::Vector2f(16, lineH));
-        temp.setPosition(sf::Vector2f(rayN*16+1060, lineOffset));
-        temp.setFillColor(Color);
-        // Get alpha color for rectangles based on their length
+        float lineOffset = 512-((int)lineH>>1);
+
+        // --- Normal Raycaster ---
+        
+        
+        // Walls
+        sf::RectangleShape wall;
+        wall.setSize(sf::Vector2f(16, lineH));
+        wall.setPosition(sf::Vector2f(rayN*16, lineOffset));
+        wall.setFillColor(Color);
+        this->walls3d.push_back(wall);
+        
+//        // Floor
+//        sf::RectangleShape floor;
+//        floor.setPosition(sf::Vector2f(wall.getPosition().x, wall.getPosition().y+lineH));
+//        float floorH = 1024 - floor.getPosition().y;
+//        floor.setSize(sf::Vector2f(16, floorH));
+//        floor.setFillColor(sf::Color::Blue);
+//        this->walls3d.push_back(floor);
+        
+        
+//         Get alpha color for rectangles based on their length
 //        float alpha = this->map(lineH, 0, 740, 0, 255);
 //        temp.setFillColor(sf::Color(Color.r, Color.g, Color.b, alpha));
         
-        
-        
-        
-        this->walls3d.push_back(temp);
-        
         // Adjust angle for next ray
-        rayAngle += DR;
+        rayAngle += DR/2;
         if (rayAngle<0)
         {
             rayAngle+=2*M_PI;
@@ -287,11 +302,15 @@ void Player::update(Map map)
 
 void Player::render(sf::RenderTarget *target)
 {
-    target->draw(this->shape);
+//    target->draw(this->shape);
     // Draw rays
-    target->draw(&this->rays[0], this->rays.size(), sf::Lines);
+//    target->draw(&this->rays[0], this->rays.size(), sf::Lines);
+    // Draw floor
+    target->draw(this->floor);
     
-    for (sf::RectangleShape wall : walls3d) {
+    
+    // Draw walls
+    for (sf::RectangleShape wall : this->walls3d) {
         target->draw(wall);
     }
 }
